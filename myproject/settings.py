@@ -15,7 +15,8 @@ SECRET_KEY = config('SECRET_KEY')  # Must be set in .env or environment
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ALLOWED_HOSTS: split comma-separated string, filter out empty strings
-ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='').split(',') if h.strip()]
+#ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='').split(',') if h.strip()]
+ALLOWED_HOSTS = ['*']
 
 # CSRF trusted origins: must include scheme (http:// or https://)
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in config('CSRF_TRUSTED_ORIGINS', default='').split(',') if o.strip()]
@@ -76,11 +77,28 @@ DATABASES = {
         default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
         conn_max_age=600,
         conn_health_checks=True,
+        ssl_require=True
     )
 }
 
-# Password validation (unchanged)
-AUTH_PASSWORD_VALIDATORS = [ ... ]  # keep as is
+
+
+# Password validation
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # JWT Authentication
 REST_FRAMEWORK = {
